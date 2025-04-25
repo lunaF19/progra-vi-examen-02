@@ -175,15 +175,67 @@ namespace Examen2.Controllers
         {
             try
             {
-                int idVuelo = db.sp_Vuelo_Inserta(dataVuelo.id_CiudadOrigen, dataVuelo.id_CiudadDestino, dataVuelo.id_Piloto, dataVuelo.cantidadHoras, dataVuelo.montoSalarioPiloto, dataVuelo.fecha);
-                
+                // Verifica si ya hay un vuelo registrado con el mismo piloto y fecha
+                var vueloExistente = (from v in db.tbl_Vuelo
+                                      where v.id_Piloto == dataVuelo.id_Piloto
+                                      && v.fecha == dataVuelo.fecha
+                                      select v).FirstOrDefault();
+
+                if (vueloExistente != null)
+                {
+                    return Json(new { msgError = "El piloto ya tiene un vuelo registrado en esa fecha." });
+                }
+
+                // Obtener salario por hora del piloto con el procedimiento almacenado
+                var dataPiloto = db.sp_Piloto_Retorna_ID(dataVuelo.id_Piloto).FirstOrDefault();
+
+                if (dataPiloto == null) return Json(new { msgError = "No hay datos de piloto." });
+
+                if (dataPiloto.salarioHora == 0)
+                {
+                    return Json(new { msgError = "No se pudo obtener el salario del piloto." });
+                }
+
+                decimal montoSalarioPilotoVuelo = 0;
+                int horas = dataVuelo.cantidadHoras;
+
+                if (horas <= 6)
+                {
+                    montoSalarioPilotoVuelo = horas * dataPiloto.salarioHora;
+                }
+                else if (horas <= 12)
+                {
+                    int horasNormales = 6;
+                    int horasMedia = horas - 6;
+                    montoSalarioPilotoVuelo = (horasNormales * dataPiloto.salarioHora) + (horasMedia * dataPiloto.salarioHora * 1.5m);
+                }
+                else
+                {
+                    int horasNormales = 6;
+                    int horasMedia = 6;
+                    int horasDobles = horas - 12;
+                    montoSalarioPilotoVuelo = (horasNormales * dataPiloto.salarioHora) +
+                                         (horasMedia * dataPiloto.salarioHora * 1.5m) +
+                                         (horasDobles * dataPiloto.salarioHora * 2m);
+                }
+
+                // Asigna el monto calculado al modelo
+                dataVuelo.montoSalarioPiloto = montoSalarioPilotoVuelo;
+
+                // Inserta el vuelo usando el procedimiento almacenado
+                db.sp_Vuelo_Inserta(dataVuelo.id_CiudadOrigen,
+                                    dataVuelo.id_CiudadDestino,
+                                    dataVuelo.id_Piloto,
+                                    dataVuelo.cantidadHoras,
+                                    dataVuelo.montoSalarioPiloto,
+                                    dataVuelo.fecha);
+
                 return Json(new { msgError = "" });
             }
             catch (Exception ex)
             {
                 return Json(new { msgError = ex.Message });
             }
-
         }
 
 
