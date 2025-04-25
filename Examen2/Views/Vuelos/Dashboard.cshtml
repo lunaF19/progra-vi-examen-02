@@ -1,0 +1,72 @@
+﻿@{ 
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <div>
+        Dashboard
+    </div>
+    <div id="chartHorasVuelo"></div>
+</body>
+</html>
+
+
+<script>
+    const initialData = [
+        { "nombre": "Carlos", "totalHoras": 120 },
+        { "nombre": "Luis", "totalHoras": 98 },
+        { "nombre": "Ana", "totalHoras": 145 }
+    ]
+    $(document).ready(function () {
+        function loadDataInKendo(newData) {
+            $("#chartHorasVuelo").kendoChart({
+                title: {
+                    text: "Horas de Vuelo por Piloto"
+                },
+                dataSource: {
+                    data: newData
+                },
+                series: [{
+                    type: "column",
+                    field: "totalHoras",
+                    categoryField: "nombre",
+                    name: "Horas de Vuelo"
+                }],
+                categoryAxis: {
+                    field: "nombre",
+                    labels: {
+                        rotation: -45
+                    }
+                },
+                valueAxis: {
+                    title: {
+                        text: "Horas"
+                    }
+                },
+                tooltip: {
+                    visible: true,
+                    format: "{0} hrs",
+                    template: "#= category #: #= value # horas"
+                }
+            });
+        }
+
+         
+        $.ajax({
+            url: "/Vuelos/DashboardObtenerHorasVuelo",
+            type: "GET",
+            success: function (data) {
+                loadDataInKendo(data)
+            },
+            error: function () {
+                alert("No se pudo cargar la información de horas de vuelo.");
+            }
+        });
+    });
+</script>

@@ -1,0 +1,62 @@
+﻿@{
+ 
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Lista de Vuelos</title>
+</head>
+<body>
+    <a class="btn btn-info" href="/Vuelos/CrearVuelo">Crear nuevo Vuelo</a>
+    <div id="data-grid"></div>
+</body>
+</html>
+
+<script defer>
+
+    function loadDataVuelos() { 
+
+        $.getJSON(`/Vuelos/RetornaVuelos`, function (dataVuelos) { 
+            console.log({ dataVuelos })
+            loadDataInGrid(dataVuelos)
+        }); 
+    }
+
+    function loadDataInGrid(newData) {
+
+        $("#data-grid").kendoGrid({
+            dataSource: {
+                data: newData,
+                schema: {
+                    model: {
+                        fields: {
+                            CiudadOrigen: { type: "string" },
+                            CiudadDestino: { type: "string" },
+                            nombreCompleto: { type: "string" },
+                            cantidadHoras: { type: "number" }
+                        }
+                    }
+                },
+                pageSize: 10
+            },
+            pageable: true,
+            sortable: true,
+            filterable: true,
+            columns: [
+                { field: "CiudadOrigen", title: "Origen" },
+                { field: "CiudadDestino", title: "Destino" },
+                { field: "nombreCompleto", title: "Piloto" },
+                { field: "cantidadHoras", title: "Duración" }
+            ]
+        });
+    }
+
+
+    $(document).ready(function () { 
+        loadDataInGrid()
+        loadDataVuelos()
+    });
+</script>

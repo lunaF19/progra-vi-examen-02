@@ -1,0 +1,57 @@
+﻿<h2>Agregar Ciudad</h2>
+<form id="formCiudad">
+    <input type="text" name="Nombre" placeholder="Nombre" required />
+    <input type="text" name="Descripcion" placeholder="Descripción" required />
+    <button type="submit">Agregar</button>
+</form>
+
+<hr />
+
+<h3>Lista Ciudades</h3>
+<div id="listaCiudades" class="list-group"> 
+    no hay datos
+</div>
+
+<script>
+    let dataVuelos = []
+    const $containerDataCiudades = $("#listaCiudades")
+    function loadDataCiudades() {
+        $.getJSON(`/Vuelos/RetornaCiudades`, function (dataCiudades) {
+            console.log({ dataCiudades })
+            dataVuelos = dataCiudades
+            loadDisplayDataCiudades()
+        });
+    }
+
+
+    function loadDisplayDataCiudades() {
+        $containerDataCiudades.empty();
+        dataVuelos.forEach(itemCiudad => {
+            $containerDataCiudades.append(` <div class="list-group-item"> <strong>${itemCiudad.Nombre}</strong>: ${itemCiudad.Descripcion} </div>`)
+        })
+    } 
+
+    loadDataCiudades()
+
+    $("#formCiudad").submit(function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: '/Vuelos/CiudadAgregar',
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function (response) {
+                if (response.msgError) {
+                    alert(`Algo ha salido mal ${response.msgError}`)
+                    return;
+                }
+
+                dataVuelos = [
+                    { Nombre: $(`[name="Nombre"]`).val(), Descripcion: $(`[name="Descripcion"]`).val() },
+                    ...dataVuelos
+                ]
+                loadDisplayDataCiudades() 
+                $("#formCiudad")[0].reset();
+            }
+        });
+    });
+</script>

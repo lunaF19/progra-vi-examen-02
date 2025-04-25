@@ -1,0 +1,208 @@
+﻿@{
+    ViewBag.Title = "Crear Vuelo";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crear Vuelo</title>
+
+    <!-- jQuery y jQuery UI -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" />
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+
+    <style>
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input, select {
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <main class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h5 class="card-title text-center mb-4">@ViewData["Title"]</h5>
+
+                        <h2>Formulario de Vuelo</h2>
+
+                        <form id="formVuelo" class="">
+                            <div class="d-flex flex-row flex-nowrap gap-2">
+                                <div class="  mb-3 w-100">
+                                    <label for="id_CiudadOrigen">Ciudad Origen</label>
+                                    <select class="form-select" id="id_CiudadOrigen" name="id_CiudadOrigen" required></select>
+                                </div>
+                            
+                                <div class="  mb-3 w-100">
+                                    <label for="id_CiudadDestino">Ciudad Destino</label>
+                                    <select class="form-select" id="id_CiudadDestino" name="id_CiudadDestino" required></select>
+                                </div>
+                             
+                                <div class="  mb-3 w-100">
+                                    <label for="id_Piloto">Piloto</label>
+                                    <select class="form-select" id="id_Piloto" name="id_Piloto"></select>
+                                </div>
+                            </div>
+
+                            <div class="d-flex flex-row flex-nowrap gap-2">
+
+                                <div>
+                                    <div class="  mb-3 w-100">
+                                        <label for="cantidadHoras">Cantidad de Horas</label>
+                                        <input class="form-control" type="text" id="cantidadHoras" name="cantidadHoras" readonly />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="  w-100">
+                                        <label for="fecha">Fecha</label>
+                                        <input class="form-control" type="text" id="fecha" name="fecha" required />
+                                    </div>
+                                </div>
+
+
+                                <label id="infoPiloto" style="font-weight:bold;"></label>
+
+
+                                <div>
+                                    <div class="  mb-3 w-100">
+                                        <label for="codigoVuelo">Código de Vuelo</label>
+                                        <input class="form-control" type="text" id="codigoVuelo" name="codigoVuelo" required />
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <br /><br />
+                            <button class="btn btn-success" type="submit" id="btnInsertar">Insertar</button>
+                            <a class="btn btn-warning" href="/Vuelos"> Volver</a>
+                        </form>
+
+                        <div id="mensaje-success" class="alert alert-success" role="alert"> </div>
+                        <div id="mensaje-error" class="alert alert-danger" role="alert"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        $(function () {
+
+            $("#mensaje-success").hide()
+            $("#mensaje-error").hide()
+            // Configurar DatePicker
+            $("#fecha").datepicker({
+                dateFormat: "yy/mm/dd",
+                changeYear: true,
+                changeMonth: true,
+                yearRange: "-1:+1"
+            });
+
+            // Cargar ciudades de origen
+            $.get('/Vuelos/RetornaCiudadOrigen', function (data) {
+                $('#id_CiudadOrigen').append('<option value="">Seleccione</option>');
+                $.each(data, function (i, item) {
+                    $('#id_CiudadOrigen').append(`<option value="${item.id_Ciudad}">${item.Ciudad}</option>`);
+                });
+            });
+
+            // Al cambiar ciudad origen, cargar ciudad destino
+            $('#id_CiudadOrigen').on('change', function () {
+                const idOrigen = $(this).val();
+                $('#id_CiudadDestino').empty().append('<option value="">Seleccione</option>');
+                $('#id_Piloto').empty().append('<option value="">Seleccione</option>');
+                $('#cantidadHoras').val('');
+                $('#infoPiloto').text('');
+
+                if (idOrigen) {
+                    $.get(`/Vuelos/RetornaCiudadDestino?idCiudadOrigen=${idOrigen}`, function (data) {
+                        $.each(data, function (i, item) {
+                            $('#id_CiudadDestino').append(`<option value="${item.id_Ciudad}">${item.Ciudad}</option>`);
+                        });
+                    });
+                }
+            });
+
+            // Al cambiar ciudad destino, cargar pilotos
+            $('#id_CiudadDestino').on('change', function () {
+                const idOrigen = $('#id_CiudadOrigen').val();
+                const idDestino = $(this).val();
+
+                $('#id_Piloto').empty().append('<option value="">Seleccione</option>');
+                $('#cantidadHoras').val('');
+                $('#infoPiloto').text('');
+
+                if (idOrigen && idDestino) {
+                    $.get(`/Vuelos/RetornaPilotoPorCiudadDestino?idCiudadOrigin=${idOrigen}&idCiudadDestino=${idDestino}`, function (data) {
+                        $.each(data, function (i, item) {
+                            $('#id_Piloto').append(`<option value="${item.id_Piloto}" data-horas="${item.cantidadHoras}">${item.nombreCompleto}</option>`);
+                        });
+                    });
+                }
+            });
+
+            // Al seleccionar piloto, mostrar info
+            $('#id_Piloto').on('change', function () {
+                const idPiloto = $(this).val();
+                const horas = $('option:selected', this).data('horas');
+                $('#cantidadHoras').val(horas || '');
+
+                if (idPiloto) {
+                    $.get(`/Vuelos/RetornaPilotoID?id=${idPiloto}`, function (data) {
+                        $('#infoPiloto').text(`Nivel del Piloto: ${data.tipoPiloto}. Código: ${data.codigo}`);
+                    });
+                }
+            });
+
+            // Enviar formulario por AJAX
+            $('#formVuelo').on('submit', function (e) {
+                e.preventDefault();
+                $('#btnInsertar').attr('disabled', 'disabled')
+                $("#mensaje-success").hide()
+                $("#mensaje-error").hide()
+                if (this.checkValidity()) {
+                    const vuelo = {
+                        id_CiudadOrigen: $('#id_CiudadOrigen').val(),
+                        id_CiudadDestino: $('#id_CiudadDestino').val(),
+                        id_Piloto: $('#id_Piloto').val(),
+                        cantidadHoras: $('#cantidadHoras').val(),
+                        fecha: $('#fecha').val(),
+                        codigoVuelo: $('#codigoVuelo').val()
+                    };
+
+                    $.ajax({
+                        url: '/Vuelos/InsertaVuelos',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(vuelo),
+                        success: function (result) {
+                            if (result.msgError) {
+                                $("#mensaje-error").show()
+                                $('#mensaje-error').text('Error al insertar vuelo').css('color', 'red');
+                                return;
+                            }
+                            $("#mensaje-success").show()
+                            $('#mensaje-success').text(`Se ha creado el vuelo con éxito!`).css('color', 'green');
+                        },
+                        error: function () {
+                            $("#mensaje-error").show()
+                            $('#mensaje-error').text('Error al insertar vuelo').css('color', 'red');
+                            $('#btnInsertar').attr('disabled', null)
+                        }
+                    });
+                } else {
+                    this.reportValidity();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

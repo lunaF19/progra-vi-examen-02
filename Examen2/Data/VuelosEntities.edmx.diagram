@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="c3a7106fe5ed45489dfac0de62e10c63" Name="Diagram1" ZoomLevel="118">
+        <EntityTypeShape EntityType="VuelosModel.tbl_Ciudad" Width="1.5" PointX="0.75" PointY="3.5" />
+        <EntityTypeShape EntityType="VuelosModel.tbl_CiudadOrigenDestino" Width="2.5" PointX="3.125" PointY="2.375" />
+        <EntityTypeShape EntityType="VuelosModel.tbl_Piloto" Width="1.5" PointX="3" PointY="10.5" />
+        <EntityTypeShape EntityType="VuelosModel.tbl_TipoPiloto" Width="1.5" PointX="1.125" PointY="0.625" />
+        <EntityTypeShape EntityType="VuelosModel.tbl_Vuelo" Width="2.375" PointX="3" PointY="6.625" />
+        <EntityTypeShape EntityType="VuelosModel.VW_CIUDAD_DESTINO" Width="1.5" PointX="5.75" PointY="1.375" />
+        <EntityTypeShape EntityType="VuelosModel.VW_CIUDAD_ORIGEN" Width="1.5" PointX="5.75" PointY="4.375" />
+        <EntityTypeShape EntityType="VuelosModel.VW_PILOTO" Width="1.5" PointX="5.75" PointY="7.375" />
+        <EntityTypeShape EntityType="VuelosModel.VW_PILOTO_ORIGEN_DESTINO" Width="1.5" PointX="7.75" PointY="1.375" />
+        <EntityTypeShape EntityType="VuelosModel.VW_VUELO" Width="1.5" PointX="7.75" PointY="5.375" />
+        <AssociationConnector Association="VuelosModel.FK_tbl_CiudadOrigenDestino_tbl_Ciudad" />
+        <AssociationConnector Association="VuelosModel.FK_tbl_CiudadOrigenDestino_tbl_Ciudad1" />
+        <AssociationConnector Association="VuelosModel.FK_tbl_Vuelo_tbl_Ciudad" />
+        <AssociationConnector Association="VuelosModel.FK_tbl_Vuelo_tbl_Ciudad1" />
+        <AssociationConnector Association="VuelosModel.FK_tbl_CiudadOrigenDestino_tbl_TipoPiloto" />
+        <AssociationConnector Association="VuelosModel.FK_tbl_Piloto_tbl_TipoPiloto" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

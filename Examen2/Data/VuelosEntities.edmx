@@ -1,0 +1,966 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="VuelosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tbl_Ciudad">
+          <Key>
+            <PropertyRef Name="id_Ciudad" />
+          </Key>
+          <Property Name="id_Ciudad" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Ciudad" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="tbl_CiudadOrigenDestino">
+          <Key>
+            <PropertyRef Name="id_CiudadOrigenDestino" />
+          </Key>
+          <Property Name="id_CiudadOrigenDestino" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_CiudadOrigen" Type="int" Nullable="false" />
+          <Property Name="id_CiudadDestino" Type="int" Nullable="false" />
+          <Property Name="id_TipoPiloto" Type="int" Nullable="false" />
+          <Property Name="cantidadHoras" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_Piloto">
+          <Key>
+            <PropertyRef Name="id_Piloto" />
+          </Key>
+          <Property Name="id_Piloto" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_TipoPiloto" Type="int" Nullable="false" />
+          <Property Name="nombreCompleto" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="codigo" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <!--Errores durante la generación:
+advertencia 6013: La tabla o vista 'Vuelos.dbo.tbl_RandomVuelos' no tiene definida una clave principal y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
+        <EntityType Name="tbl_RandomVuelos">
+          <Property Name="id" Type="int" />
+        </EntityType>-->
+        <EntityType Name="tbl_TipoPiloto">
+          <Key>
+            <PropertyRef Name="id_TipoPiloto" />
+          </Key>
+          <Property Name="id_TipoPiloto" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="tipoPiloto" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="salarioHora" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_Vuelo">
+          <Key>
+            <PropertyRef Name="id_Vuelo" />
+          </Key>
+          <Property Name="id_Vuelo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_CiudadOrigen" Type="int" Nullable="false" />
+          <Property Name="id_CiudadDestino" Type="int" Nullable="false" />
+          <Property Name="id_Piloto" Type="int" Nullable="false" />
+          <Property Name="cantidadHoras" Type="int" Nullable="false" />
+          <Property Name="montoSalarioPiloto" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="fecha" Type="datetime" />
+        </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'Vuelos.dbo.VW_CIUDAD_DESTINO' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="VW_CIUDAD_DESTINO">
+          <Key>
+            <PropertyRef Name="id_Ciudad" />
+            <PropertyRef Name="Ciudad" />
+            <PropertyRef Name="id_TipoPiloto" />
+            <PropertyRef Name="cantidadHoras" />
+            <PropertyRef Name="id_CiudadOrigen" />
+          </Key>
+          <Property Name="id_Ciudad" Type="int" Nullable="false" />
+          <Property Name="Ciudad" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="id_TipoPiloto" Type="int" Nullable="false" />
+          <Property Name="cantidadHoras" Type="int" Nullable="false" />
+          <Property Name="id_CiudadOrigen" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'Vuelos.dbo.VW_CIUDAD_ORIGEN' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="VW_CIUDAD_ORIGEN">
+          <Key>
+            <PropertyRef Name="id_Ciudad" />
+            <PropertyRef Name="Ciudad" />
+            <PropertyRef Name="id_TipoPiloto" />
+          </Key>
+          <Property Name="id_Ciudad" Type="int" Nullable="false" />
+          <Property Name="Ciudad" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="id_TipoPiloto" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'Vuelos.dbo.VW_PILOTO' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="VW_PILOTO">
+          <Key>
+            <PropertyRef Name="id_Piloto" />
+            <PropertyRef Name="nombreCompleto" />
+            <PropertyRef Name="codigo" />
+            <PropertyRef Name="id_TipoPiloto" />
+            <PropertyRef Name="tipoPiloto" />
+            <PropertyRef Name="salarioHora" />
+          </Key>
+          <Property Name="id_Piloto" Type="int" Nullable="false" />
+          <Property Name="nombreCompleto" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="codigo" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="id_TipoPiloto" Type="int" Nullable="false" />
+          <Property Name="tipoPiloto" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="salarioHora" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'Vuelos.dbo.VW_PILOTO_ORIGEN_DESTINO' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="VW_PILOTO_ORIGEN_DESTINO">
+          <Key>
+            <PropertyRef Name="id_CiudadOrigenDestino" />
+            <PropertyRef Name="id_CiudadOrigen" />
+            <PropertyRef Name="id_CiudadDestino" />
+            <PropertyRef Name="id_TipoPiloto" />
+            <PropertyRef Name="tipoPiloto" />
+            <PropertyRef Name="salarioHora" />
+            <PropertyRef Name="id_Piloto" />
+            <PropertyRef Name="nombreCompleto" />
+            <PropertyRef Name="codigo" />
+            <PropertyRef Name="cantidadHoras" />
+          </Key>
+          <Property Name="id_CiudadOrigenDestino" Type="int" Nullable="false" />
+          <Property Name="id_CiudadOrigen" Type="int" Nullable="false" />
+          <Property Name="id_CiudadDestino" Type="int" Nullable="false" />
+          <Property Name="id_TipoPiloto" Type="int" Nullable="false" />
+          <Property Name="tipoPiloto" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="salarioHora" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="id_Piloto" Type="int" Nullable="false" />
+          <Property Name="nombreCompleto" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="codigo" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="cantidadHoras" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'Vuelos.dbo.VW_VUELO' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="VW_VUELO">
+          <Key>
+            <PropertyRef Name="id_Vuelo" />
+            <PropertyRef Name="id_CiudadOrigen" />
+            <PropertyRef Name="id_Piloto" />
+            <PropertyRef Name="montoSalarioPiloto" />
+            <PropertyRef Name="nombreCompleto" />
+            <PropertyRef Name="codigo" />
+            <PropertyRef Name="cantidadHoras" />
+            <PropertyRef Name="CiudadOrigen" />
+            <PropertyRef Name="id_CiudadDestino" />
+            <PropertyRef Name="CiudadDestino" />
+            <PropertyRef Name="id_TipoPiloto" />
+            <PropertyRef Name="tipoPiloto" />
+            <PropertyRef Name="salarioHora" />
+          </Key>
+          <Property Name="id_Vuelo" Type="int" Nullable="false" />
+          <Property Name="id_CiudadOrigen" Type="int" Nullable="false" />
+          <Property Name="id_Piloto" Type="int" Nullable="false" />
+          <Property Name="montoSalarioPiloto" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="fecha" Type="datetime" />
+          <Property Name="nombreCompleto" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="codigo" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="cantidadHoras" Type="int" Nullable="false" />
+          <Property Name="CiudadOrigen" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="id_CiudadDestino" Type="int" Nullable="false" />
+          <Property Name="CiudadDestino" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="id_TipoPiloto" Type="int" Nullable="false" />
+          <Property Name="tipoPiloto" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="salarioHora" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_tbl_CiudadOrigenDestino_tbl_Ciudad">
+          <End Role="tbl_Ciudad" Type="Self.tbl_Ciudad" Multiplicity="1" />
+          <End Role="tbl_CiudadOrigenDestino" Type="Self.tbl_CiudadOrigenDestino" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Ciudad">
+              <PropertyRef Name="id_Ciudad" />
+            </Principal>
+            <Dependent Role="tbl_CiudadOrigenDestino">
+              <PropertyRef Name="id_CiudadOrigen" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_CiudadOrigenDestino_tbl_Ciudad1">
+          <End Role="tbl_Ciudad" Type="Self.tbl_Ciudad" Multiplicity="1" />
+          <End Role="tbl_CiudadOrigenDestino" Type="Self.tbl_CiudadOrigenDestino" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Ciudad">
+              <PropertyRef Name="id_Ciudad" />
+            </Principal>
+            <Dependent Role="tbl_CiudadOrigenDestino">
+              <PropertyRef Name="id_CiudadDestino" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_CiudadOrigenDestino_tbl_TipoPiloto">
+          <End Role="tbl_TipoPiloto" Type="Self.tbl_TipoPiloto" Multiplicity="1" />
+          <End Role="tbl_CiudadOrigenDestino" Type="Self.tbl_CiudadOrigenDestino" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_TipoPiloto">
+              <PropertyRef Name="id_TipoPiloto" />
+            </Principal>
+            <Dependent Role="tbl_CiudadOrigenDestino">
+              <PropertyRef Name="id_TipoPiloto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_Piloto_tbl_TipoPiloto">
+          <End Role="tbl_TipoPiloto" Type="Self.tbl_TipoPiloto" Multiplicity="1" />
+          <End Role="tbl_Piloto" Type="Self.tbl_Piloto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_TipoPiloto">
+              <PropertyRef Name="id_TipoPiloto" />
+            </Principal>
+            <Dependent Role="tbl_Piloto">
+              <PropertyRef Name="id_TipoPiloto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_Vuelo_tbl_Ciudad">
+          <End Role="tbl_Ciudad" Type="Self.tbl_Ciudad" Multiplicity="1" />
+          <End Role="tbl_Vuelo" Type="Self.tbl_Vuelo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Ciudad">
+              <PropertyRef Name="id_Ciudad" />
+            </Principal>
+            <Dependent Role="tbl_Vuelo">
+              <PropertyRef Name="id_CiudadOrigen" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_Vuelo_tbl_Ciudad1">
+          <End Role="tbl_Ciudad" Type="Self.tbl_Ciudad" Multiplicity="1" />
+          <End Role="tbl_Vuelo" Type="Self.tbl_Vuelo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Ciudad">
+              <PropertyRef Name="id_Ciudad" />
+            </Principal>
+            <Dependent Role="tbl_Vuelo">
+              <PropertyRef Name="id_CiudadDestino" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="sp_Ciudad_Destino_Retorna" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_Ciudad_Origen" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_Ciudad_Origen_Retorna" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_Origen_Destino_Duracion_Retorna" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_CiudadOrigen" Type="int" Mode="In" />
+          <Parameter Name="id_CiudadDestino" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_Piloto_Origen_Destino_Retorna" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_CiudadOrigen" Type="int" Mode="In" />
+          <Parameter Name="id_CiudadDestino" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_Piloto_Retorna_ID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_Piloto" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_Piloto_Retorna_PorTipoPiloto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_TipoPiloto" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_Tipo_Piloto_Retorna" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_Vuelo_Inserta" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id_CiudadOrigen" Type="int" Mode="In" />
+          <Parameter Name="id_CiudadDestino" Type="int" Mode="In" />
+          <Parameter Name="id_Piloto" Type="int" Mode="In" />
+          <Parameter Name="cantidadHoras" Type="int" Mode="In" />
+          <Parameter Name="montoSalarioPiloto" Type="decimal" Mode="In" />
+          <Parameter Name="fecha" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="sp_Vuelo_Retorna" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="VuelosModelStoreContainer">
+          <EntitySet Name="tbl_Ciudad" EntityType="Self.tbl_Ciudad" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_CiudadOrigenDestino" EntityType="Self.tbl_CiudadOrigenDestino" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_Piloto" EntityType="Self.tbl_Piloto" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_TipoPiloto" EntityType="Self.tbl_TipoPiloto" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_Vuelo" EntityType="Self.tbl_Vuelo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VW_CIUDAD_DESTINO" EntityType="Self.VW_CIUDAD_DESTINO" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VW_CIUDAD_DESTINO].[id_Ciudad] AS [id_Ciudad], 
+    [VW_CIUDAD_DESTINO].[Ciudad] AS [Ciudad], 
+    [VW_CIUDAD_DESTINO].[id_TipoPiloto] AS [id_TipoPiloto], 
+    [VW_CIUDAD_DESTINO].[cantidadHoras] AS [cantidadHoras], 
+    [VW_CIUDAD_DESTINO].[id_CiudadOrigen] AS [id_CiudadOrigen]
+    FROM [dbo].[VW_CIUDAD_DESTINO] AS [VW_CIUDAD_DESTINO]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VW_CIUDAD_ORIGEN" EntityType="Self.VW_CIUDAD_ORIGEN" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VW_CIUDAD_ORIGEN].[id_Ciudad] AS [id_Ciudad], 
+    [VW_CIUDAD_ORIGEN].[Ciudad] AS [Ciudad], 
+    [VW_CIUDAD_ORIGEN].[id_TipoPiloto] AS [id_TipoPiloto]
+    FROM [dbo].[VW_CIUDAD_ORIGEN] AS [VW_CIUDAD_ORIGEN]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VW_PILOTO" EntityType="Self.VW_PILOTO" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VW_PILOTO].[id_Piloto] AS [id_Piloto], 
+    [VW_PILOTO].[nombreCompleto] AS [nombreCompleto], 
+    [VW_PILOTO].[codigo] AS [codigo], 
+    [VW_PILOTO].[id_TipoPiloto] AS [id_TipoPiloto], 
+    [VW_PILOTO].[tipoPiloto] AS [tipoPiloto], 
+    [VW_PILOTO].[salarioHora] AS [salarioHora]
+    FROM [dbo].[VW_PILOTO] AS [VW_PILOTO]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VW_PILOTO_ORIGEN_DESTINO" EntityType="Self.VW_PILOTO_ORIGEN_DESTINO" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VW_PILOTO_ORIGEN_DESTINO].[id_CiudadOrigenDestino] AS [id_CiudadOrigenDestino], 
+    [VW_PILOTO_ORIGEN_DESTINO].[id_CiudadOrigen] AS [id_CiudadOrigen], 
+    [VW_PILOTO_ORIGEN_DESTINO].[id_CiudadDestino] AS [id_CiudadDestino], 
+    [VW_PILOTO_ORIGEN_DESTINO].[id_TipoPiloto] AS [id_TipoPiloto], 
+    [VW_PILOTO_ORIGEN_DESTINO].[tipoPiloto] AS [tipoPiloto], 
+    [VW_PILOTO_ORIGEN_DESTINO].[salarioHora] AS [salarioHora], 
+    [VW_PILOTO_ORIGEN_DESTINO].[id_Piloto] AS [id_Piloto], 
+    [VW_PILOTO_ORIGEN_DESTINO].[nombreCompleto] AS [nombreCompleto], 
+    [VW_PILOTO_ORIGEN_DESTINO].[codigo] AS [codigo], 
+    [VW_PILOTO_ORIGEN_DESTINO].[cantidadHoras] AS [cantidadHoras]
+    FROM [dbo].[VW_PILOTO_ORIGEN_DESTINO] AS [VW_PILOTO_ORIGEN_DESTINO]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VW_VUELO" EntityType="Self.VW_VUELO" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VW_VUELO].[id_Vuelo] AS [id_Vuelo], 
+    [VW_VUELO].[id_CiudadOrigen] AS [id_CiudadOrigen], 
+    [VW_VUELO].[id_Piloto] AS [id_Piloto], 
+    [VW_VUELO].[montoSalarioPiloto] AS [montoSalarioPiloto], 
+    [VW_VUELO].[fecha] AS [fecha], 
+    [VW_VUELO].[nombreCompleto] AS [nombreCompleto], 
+    [VW_VUELO].[codigo] AS [codigo], 
+    [VW_VUELO].[cantidadHoras] AS [cantidadHoras], 
+    [VW_VUELO].[CiudadOrigen] AS [CiudadOrigen], 
+    [VW_VUELO].[id_CiudadDestino] AS [id_CiudadDestino], 
+    [VW_VUELO].[CiudadDestino] AS [CiudadDestino], 
+    [VW_VUELO].[id_TipoPiloto] AS [id_TipoPiloto], 
+    [VW_VUELO].[tipoPiloto] AS [tipoPiloto], 
+    [VW_VUELO].[salarioHora] AS [salarioHora]
+    FROM [dbo].[VW_VUELO] AS [VW_VUELO]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_tbl_CiudadOrigenDestino_tbl_Ciudad" Association="Self.FK_tbl_CiudadOrigenDestino_tbl_Ciudad">
+            <End Role="tbl_Ciudad" EntitySet="tbl_Ciudad" />
+            <End Role="tbl_CiudadOrigenDestino" EntitySet="tbl_CiudadOrigenDestino" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_CiudadOrigenDestino_tbl_Ciudad1" Association="Self.FK_tbl_CiudadOrigenDestino_tbl_Ciudad1">
+            <End Role="tbl_Ciudad" EntitySet="tbl_Ciudad" />
+            <End Role="tbl_CiudadOrigenDestino" EntitySet="tbl_CiudadOrigenDestino" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_CiudadOrigenDestino_tbl_TipoPiloto" Association="Self.FK_tbl_CiudadOrigenDestino_tbl_TipoPiloto">
+            <End Role="tbl_TipoPiloto" EntitySet="tbl_TipoPiloto" />
+            <End Role="tbl_CiudadOrigenDestino" EntitySet="tbl_CiudadOrigenDestino" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_Piloto_tbl_TipoPiloto" Association="Self.FK_tbl_Piloto_tbl_TipoPiloto">
+            <End Role="tbl_TipoPiloto" EntitySet="tbl_TipoPiloto" />
+            <End Role="tbl_Piloto" EntitySet="tbl_Piloto" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_Vuelo_tbl_Ciudad" Association="Self.FK_tbl_Vuelo_tbl_Ciudad">
+            <End Role="tbl_Ciudad" EntitySet="tbl_Ciudad" />
+            <End Role="tbl_Vuelo" EntitySet="tbl_Vuelo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_Vuelo_tbl_Ciudad1" Association="Self.FK_tbl_Vuelo_tbl_Ciudad1">
+            <End Role="tbl_Ciudad" EntitySet="tbl_Ciudad" />
+            <End Role="tbl_Vuelo" EntitySet="tbl_Vuelo" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="VuelosModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="VuelosEntitiesConnection" annotation:LazyLoadingEnabled="true">
+          <FunctionImport Name="sp_Ciudad_Destino_Retorna" ReturnType="Collection(VuelosModel.sp_Ciudad_Destino_Retorna_Result)">
+          <Parameter Name="id_Ciudad_Origen" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Ciudad_Origen_Retorna" ReturnType="Collection(VuelosModel.sp_Ciudad_Origen_Retorna_Result)" />
+          <FunctionImport Name="sp_Origen_Destino_Duracion_Retorna" ReturnType="Collection(VuelosModel.sp_Origen_Destino_Duracion_Retorna_Result)">
+            <Parameter Name="id_CiudadOrigen" Mode="In" Type="Int32" />
+            <Parameter Name="id_CiudadDestino" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Piloto_Origen_Destino_Retorna" ReturnType="Collection(VuelosModel.sp_Piloto_Origen_Destino_Retorna_Result)">
+            <Parameter Name="id_CiudadOrigen" Mode="In" Type="Int32" />
+            <Parameter Name="id_CiudadDestino" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Piloto_Retorna_ID" ReturnType="Collection(VuelosModel.sp_Piloto_Retorna_ID_Result)">
+          <Parameter Name="id_Piloto" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Piloto_Retorna_PorTipoPiloto" ReturnType="Collection(VuelosModel.sp_Piloto_Retorna_PorTipoPiloto_Result)">
+          <Parameter Name="id_TipoPiloto" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Tipo_Piloto_Retorna" ReturnType="Collection(VuelosModel.sp_Tipo_Piloto_Retorna_Result)" />
+          <FunctionImport Name="sp_Vuelo_Inserta">
+            <Parameter Name="id_CiudadOrigen" Mode="In" Type="Int32" />
+            <Parameter Name="id_CiudadDestino" Mode="In" Type="Int32" />
+            <Parameter Name="id_Piloto" Mode="In" Type="Int32" />
+            <Parameter Name="cantidadHoras" Mode="In" Type="Int32" />
+            <Parameter Name="montoSalarioPiloto" Mode="In" Type="Decimal" />
+            <Parameter Name="fecha" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Vuelo_Retorna" ReturnType="Collection(VuelosModel.sp_Vuelo_Retorna_Result)" />
+          <EntitySet Name="tbl_Ciudad" EntityType="VuelosModel.tbl_Ciudad" />
+          <EntitySet Name="tbl_CiudadOrigenDestino" EntityType="VuelosModel.tbl_CiudadOrigenDestino" />
+          <EntitySet Name="tbl_Piloto" EntityType="VuelosModel.tbl_Piloto" />
+          <EntitySet Name="tbl_TipoPiloto" EntityType="VuelosModel.tbl_TipoPiloto" />
+          <EntitySet Name="tbl_Vuelo" EntityType="VuelosModel.tbl_Vuelo" />
+          <EntitySet Name="VW_CIUDAD_DESTINO" EntityType="VuelosModel.VW_CIUDAD_DESTINO" />
+          <EntitySet Name="VW_CIUDAD_ORIGEN" EntityType="VuelosModel.VW_CIUDAD_ORIGEN" />
+          <EntitySet Name="VW_PILOTO" EntityType="VuelosModel.VW_PILOTO" />
+          <EntitySet Name="VW_PILOTO_ORIGEN_DESTINO" EntityType="VuelosModel.VW_PILOTO_ORIGEN_DESTINO" />
+          <EntitySet Name="VW_VUELO" EntityType="VuelosModel.VW_VUELO" />
+          <AssociationSet Name="FK_tbl_CiudadOrigenDestino_tbl_Ciudad" Association="VuelosModel.FK_tbl_CiudadOrigenDestino_tbl_Ciudad">
+            <End Role="tbl_Ciudad" EntitySet="tbl_Ciudad" />
+            <End Role="tbl_CiudadOrigenDestino" EntitySet="tbl_CiudadOrigenDestino" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_CiudadOrigenDestino_tbl_Ciudad1" Association="VuelosModel.FK_tbl_CiudadOrigenDestino_tbl_Ciudad1">
+            <End Role="tbl_Ciudad" EntitySet="tbl_Ciudad" />
+            <End Role="tbl_CiudadOrigenDestino" EntitySet="tbl_CiudadOrigenDestino" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_Vuelo_tbl_Ciudad" Association="VuelosModel.FK_tbl_Vuelo_tbl_Ciudad">
+            <End Role="tbl_Ciudad" EntitySet="tbl_Ciudad" />
+            <End Role="tbl_Vuelo" EntitySet="tbl_Vuelo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_Vuelo_tbl_Ciudad1" Association="VuelosModel.FK_tbl_Vuelo_tbl_Ciudad1">
+            <End Role="tbl_Ciudad" EntitySet="tbl_Ciudad" />
+            <End Role="tbl_Vuelo" EntitySet="tbl_Vuelo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_CiudadOrigenDestino_tbl_TipoPiloto" Association="VuelosModel.FK_tbl_CiudadOrigenDestino_tbl_TipoPiloto">
+            <End Role="tbl_TipoPiloto" EntitySet="tbl_TipoPiloto" />
+            <End Role="tbl_CiudadOrigenDestino" EntitySet="tbl_CiudadOrigenDestino" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_Piloto_tbl_TipoPiloto" Association="VuelosModel.FK_tbl_Piloto_tbl_TipoPiloto">
+            <End Role="tbl_TipoPiloto" EntitySet="tbl_TipoPiloto" />
+            <End Role="tbl_Piloto" EntitySet="tbl_Piloto" />
+          </AssociationSet>
+        </EntityContainer>
+        <ComplexType Name="sp_Ciudad_Destino_Retorna_Result">
+          <Property Type="Int32" Name="id_Ciudad" Nullable="false" />
+          <Property Type="String" Name="Ciudad" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="id_TipoPiloto" Nullable="false" />
+          <Property Type="Int32" Name="cantidadHoras" Nullable="false" />
+          <Property Type="Int32" Name="id_CiudadOrigen" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="sp_Ciudad_Origen_Retorna_Result">
+          <Property Type="Int32" Name="id_Ciudad" Nullable="false" />
+          <Property Type="String" Name="Ciudad" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="id_TipoPiloto" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="sp_Origen_Destino_Duracion_Retorna_Result">
+          <Property Type="Int32" Name="id_CiudadOrigenDestino" Nullable="false" />
+          <Property Type="Int32" Name="id_CiudadOrigen" Nullable="false" />
+          <Property Type="Int32" Name="id_CiudadDestino" Nullable="false" />
+          <Property Type="Int32" Name="id_TipoPiloto" Nullable="false" />
+          <Property Type="Int32" Name="cantidadHoras" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="sp_Piloto_Origen_Destino_Retorna_Result">
+          <Property Type="Int32" Name="id_CiudadOrigenDestino" Nullable="false" />
+          <Property Type="Int32" Name="id_CiudadOrigen" Nullable="false" />
+          <Property Type="Int32" Name="id_CiudadDestino" Nullable="false" />
+          <Property Type="Int32" Name="id_TipoPiloto" Nullable="false" />
+          <Property Type="String" Name="tipoPiloto" Nullable="false" MaxLength="50" />
+          <Property Type="Decimal" Name="salarioHora" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="id_Piloto" Nullable="false" />
+          <Property Type="String" Name="nombreCompleto" Nullable="false" MaxLength="500" />
+          <Property Type="String" Name="codigo" Nullable="false" MaxLength="30" />
+          <Property Type="Int32" Name="cantidadHoras" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="sp_Piloto_Retorna_ID_Result">
+          <Property Type="Int32" Name="id_Piloto" Nullable="false" />
+          <Property Type="String" Name="nombreCompleto" Nullable="false" MaxLength="500" />
+          <Property Type="String" Name="codigo" Nullable="false" MaxLength="30" />
+          <Property Type="Int32" Name="id_TipoPiloto" Nullable="false" />
+          <Property Type="String" Name="tipoPiloto" Nullable="false" MaxLength="50" />
+          <Property Type="Decimal" Name="salarioHora" Nullable="false" Precision="18" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="sp_Piloto_Retorna_PorTipoPiloto_Result">
+          <Property Type="Int32" Name="id_Piloto" Nullable="false" />
+          <Property Type="String" Name="nombreCompleto" Nullable="false" MaxLength="500" />
+          <Property Type="String" Name="codigo" Nullable="false" MaxLength="30" />
+          <Property Type="Int32" Name="id_TipoPiloto" Nullable="false" />
+          <Property Type="String" Name="tipoPiloto" Nullable="false" MaxLength="50" />
+          <Property Type="Decimal" Name="salarioHora" Nullable="false" Precision="18" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="sp_Tipo_Piloto_Retorna_Result">
+          <Property Type="Int32" Name="id_TipoPiloto" Nullable="false" />
+          <Property Type="String" Name="tipoPiloto" Nullable="false" MaxLength="50" />
+          <Property Type="Decimal" Name="salarioHora" Nullable="false" Precision="18" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="sp_Vuelo_Retorna_Result">
+          <Property Type="Int32" Name="id_Vuelo" Nullable="false" />
+          <Property Type="Int32" Name="id_CiudadOrigen" Nullable="false" />
+          <Property Type="Int32" Name="id_Piloto" Nullable="false" />
+          <Property Type="Decimal" Name="montoSalarioPiloto" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="DateTime" Name="fecha" Nullable="true" Precision="23" />
+          <Property Type="String" Name="nombreCompleto" Nullable="false" MaxLength="500" />
+          <Property Type="String" Name="codigo" Nullable="false" MaxLength="30" />
+          <Property Type="Int32" Name="cantidadHoras" Nullable="false" />
+          <Property Type="String" Name="CiudadOrigen" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="id_CiudadDestino" Nullable="false" />
+          <Property Type="String" Name="CiudadDestino" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="id_TipoPiloto" Nullable="false" />
+          <Property Type="String" Name="tipoPiloto" Nullable="false" MaxLength="50" />
+          <Property Type="Decimal" Name="salarioHora" Nullable="false" Precision="18" Scale="2" />
+        </ComplexType>
+        <EntityType Name="tbl_Ciudad">
+          <Key>
+            <PropertyRef Name="id_Ciudad" />
+          </Key>
+          <Property Name="id_Ciudad" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Ciudad" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tbl_CiudadOrigenDestino" Relationship="VuelosModel.FK_tbl_CiudadOrigenDestino_tbl_Ciudad" FromRole="tbl_Ciudad" ToRole="tbl_CiudadOrigenDestino" />
+          <NavigationProperty Name="tbl_CiudadOrigenDestino1" Relationship="VuelosModel.FK_tbl_CiudadOrigenDestino_tbl_Ciudad1" FromRole="tbl_Ciudad" ToRole="tbl_CiudadOrigenDestino" />
+          <NavigationProperty Name="tbl_Vuelo" Relationship="VuelosModel.FK_tbl_Vuelo_tbl_Ciudad" FromRole="tbl_Ciudad" ToRole="tbl_Vuelo" />
+          <NavigationProperty Name="tbl_Vuelo1" Relationship="VuelosModel.FK_tbl_Vuelo_tbl_Ciudad1" FromRole="tbl_Ciudad" ToRole="tbl_Vuelo" />
+        </EntityType>
+        <EntityType Name="tbl_CiudadOrigenDestino">
+          <Key>
+            <PropertyRef Name="id_CiudadOrigenDestino" />
+          </Key>
+          <Property Name="id_CiudadOrigenDestino" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_CiudadOrigen" Type="Int32" Nullable="false" />
+          <Property Name="id_CiudadDestino" Type="Int32" Nullable="false" />
+          <Property Name="id_TipoPiloto" Type="Int32" Nullable="false" />
+          <Property Name="cantidadHoras" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tbl_Ciudad" Relationship="VuelosModel.FK_tbl_CiudadOrigenDestino_tbl_Ciudad" FromRole="tbl_CiudadOrigenDestino" ToRole="tbl_Ciudad" />
+          <NavigationProperty Name="tbl_Ciudad1" Relationship="VuelosModel.FK_tbl_CiudadOrigenDestino_tbl_Ciudad1" FromRole="tbl_CiudadOrigenDestino" ToRole="tbl_Ciudad" />
+          <NavigationProperty Name="tbl_TipoPiloto" Relationship="VuelosModel.FK_tbl_CiudadOrigenDestino_tbl_TipoPiloto" FromRole="tbl_CiudadOrigenDestino" ToRole="tbl_TipoPiloto" />
+        </EntityType>
+        <EntityType Name="tbl_Piloto">
+          <Key>
+            <PropertyRef Name="id_Piloto" />
+          </Key>
+          <Property Name="id_Piloto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_TipoPiloto" Type="Int32" Nullable="false" />
+          <Property Name="nombreCompleto" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="codigo" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tbl_TipoPiloto" Relationship="VuelosModel.FK_tbl_Piloto_tbl_TipoPiloto" FromRole="tbl_Piloto" ToRole="tbl_TipoPiloto" />
+        </EntityType>
+        <EntityType Name="tbl_TipoPiloto">
+          <Key>
+            <PropertyRef Name="id_TipoPiloto" />
+          </Key>
+          <Property Name="id_TipoPiloto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="tipoPiloto" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="salarioHora" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <NavigationProperty Name="tbl_CiudadOrigenDestino" Relationship="VuelosModel.FK_tbl_CiudadOrigenDestino_tbl_TipoPiloto" FromRole="tbl_TipoPiloto" ToRole="tbl_CiudadOrigenDestino" />
+          <NavigationProperty Name="tbl_Piloto" Relationship="VuelosModel.FK_tbl_Piloto_tbl_TipoPiloto" FromRole="tbl_TipoPiloto" ToRole="tbl_Piloto" />
+        </EntityType>
+        <EntityType Name="tbl_Vuelo">
+          <Key>
+            <PropertyRef Name="id_Vuelo" />
+          </Key>
+          <Property Name="id_Vuelo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_CiudadOrigen" Type="Int32" Nullable="false" />
+          <Property Name="id_CiudadDestino" Type="Int32" Nullable="false" />
+          <Property Name="id_Piloto" Type="Int32" Nullable="false" />
+          <Property Name="cantidadHoras" Type="Int32" Nullable="false" />
+          <Property Name="montoSalarioPiloto" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="fecha" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="tbl_Ciudad" Relationship="VuelosModel.FK_tbl_Vuelo_tbl_Ciudad" FromRole="tbl_Vuelo" ToRole="tbl_Ciudad" />
+          <NavigationProperty Name="tbl_Ciudad1" Relationship="VuelosModel.FK_tbl_Vuelo_tbl_Ciudad1" FromRole="tbl_Vuelo" ToRole="tbl_Ciudad" />
+        </EntityType>
+        <EntityType Name="VW_CIUDAD_DESTINO">
+          <Key>
+            <PropertyRef Name="id_Ciudad" />
+            <PropertyRef Name="Ciudad" />
+            <PropertyRef Name="id_TipoPiloto" />
+            <PropertyRef Name="cantidadHoras" />
+            <PropertyRef Name="id_CiudadOrigen" />
+          </Key>
+          <Property Name="id_Ciudad" Type="Int32" Nullable="false" />
+          <Property Name="Ciudad" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="id_TipoPiloto" Type="Int32" Nullable="false" />
+          <Property Name="cantidadHoras" Type="Int32" Nullable="false" />
+          <Property Name="id_CiudadOrigen" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="VW_CIUDAD_ORIGEN">
+          <Key>
+            <PropertyRef Name="id_Ciudad" />
+            <PropertyRef Name="Ciudad" />
+            <PropertyRef Name="id_TipoPiloto" />
+          </Key>
+          <Property Name="id_Ciudad" Type="Int32" Nullable="false" />
+          <Property Name="Ciudad" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="id_TipoPiloto" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="VW_PILOTO">
+          <Key>
+            <PropertyRef Name="id_Piloto" />
+            <PropertyRef Name="nombreCompleto" />
+            <PropertyRef Name="codigo" />
+            <PropertyRef Name="id_TipoPiloto" />
+            <PropertyRef Name="tipoPiloto" />
+            <PropertyRef Name="salarioHora" />
+          </Key>
+          <Property Name="id_Piloto" Type="Int32" Nullable="false" />
+          <Property Name="nombreCompleto" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="codigo" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="id_TipoPiloto" Type="Int32" Nullable="false" />
+          <Property Name="tipoPiloto" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="salarioHora" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="VW_PILOTO_ORIGEN_DESTINO">
+          <Key>
+            <PropertyRef Name="id_CiudadOrigenDestino" />
+            <PropertyRef Name="id_CiudadOrigen" />
+            <PropertyRef Name="id_CiudadDestino" />
+            <PropertyRef Name="id_TipoPiloto" />
+            <PropertyRef Name="tipoPiloto" />
+            <PropertyRef Name="salarioHora" />
+            <PropertyRef Name="id_Piloto" />
+            <PropertyRef Name="nombreCompleto" />
+            <PropertyRef Name="codigo" />
+            <PropertyRef Name="cantidadHoras" />
+          </Key>
+          <Property Name="id_CiudadOrigenDestino" Type="Int32" Nullable="false" />
+          <Property Name="id_CiudadOrigen" Type="Int32" Nullable="false" />
+          <Property Name="id_CiudadDestino" Type="Int32" Nullable="false" />
+          <Property Name="id_TipoPiloto" Type="Int32" Nullable="false" />
+          <Property Name="tipoPiloto" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="salarioHora" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="id_Piloto" Type="Int32" Nullable="false" />
+          <Property Name="nombreCompleto" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="codigo" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="cantidadHoras" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="VW_VUELO">
+          <Key>
+            <PropertyRef Name="id_Vuelo" />
+            <PropertyRef Name="id_CiudadOrigen" />
+            <PropertyRef Name="id_Piloto" />
+            <PropertyRef Name="montoSalarioPiloto" />
+            <PropertyRef Name="nombreCompleto" />
+            <PropertyRef Name="codigo" />
+            <PropertyRef Name="cantidadHoras" />
+            <PropertyRef Name="CiudadOrigen" />
+            <PropertyRef Name="id_CiudadDestino" />
+            <PropertyRef Name="CiudadDestino" />
+            <PropertyRef Name="id_TipoPiloto" />
+            <PropertyRef Name="tipoPiloto" />
+            <PropertyRef Name="salarioHora" />
+          </Key>
+          <Property Name="id_Vuelo" Type="Int32" Nullable="false" />
+          <Property Name="id_CiudadOrigen" Type="Int32" Nullable="false" />
+          <Property Name="id_Piloto" Type="Int32" Nullable="false" />
+          <Property Name="montoSalarioPiloto" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="fecha" Type="DateTime" Precision="3" />
+          <Property Name="nombreCompleto" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="codigo" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="cantidadHoras" Type="Int32" Nullable="false" />
+          <Property Name="CiudadOrigen" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="id_CiudadDestino" Type="Int32" Nullable="false" />
+          <Property Name="CiudadDestino" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="id_TipoPiloto" Type="Int32" Nullable="false" />
+          <Property Name="tipoPiloto" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="salarioHora" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+        </EntityType>
+        <Association Name="FK_tbl_CiudadOrigenDestino_tbl_Ciudad">
+          <End Type="VuelosModel.tbl_Ciudad" Role="tbl_Ciudad" Multiplicity="1" />
+          <End Type="VuelosModel.tbl_CiudadOrigenDestino" Role="tbl_CiudadOrigenDestino" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Ciudad">
+              <PropertyRef Name="id_Ciudad" />
+            </Principal>
+            <Dependent Role="tbl_CiudadOrigenDestino">
+              <PropertyRef Name="id_CiudadOrigen" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_CiudadOrigenDestino_tbl_Ciudad1">
+          <End Type="VuelosModel.tbl_Ciudad" Role="tbl_Ciudad" Multiplicity="1" />
+          <End Type="VuelosModel.tbl_CiudadOrigenDestino" Role="tbl_CiudadOrigenDestino" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Ciudad">
+              <PropertyRef Name="id_Ciudad" />
+            </Principal>
+            <Dependent Role="tbl_CiudadOrigenDestino">
+              <PropertyRef Name="id_CiudadDestino" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_Vuelo_tbl_Ciudad">
+          <End Type="VuelosModel.tbl_Ciudad" Role="tbl_Ciudad" Multiplicity="1" />
+          <End Type="VuelosModel.tbl_Vuelo" Role="tbl_Vuelo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Ciudad">
+              <PropertyRef Name="id_Ciudad" />
+            </Principal>
+            <Dependent Role="tbl_Vuelo">
+              <PropertyRef Name="id_CiudadOrigen" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_Vuelo_tbl_Ciudad1">
+          <End Type="VuelosModel.tbl_Ciudad" Role="tbl_Ciudad" Multiplicity="1" />
+          <End Type="VuelosModel.tbl_Vuelo" Role="tbl_Vuelo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Ciudad">
+              <PropertyRef Name="id_Ciudad" />
+            </Principal>
+            <Dependent Role="tbl_Vuelo">
+              <PropertyRef Name="id_CiudadDestino" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_CiudadOrigenDestino_tbl_TipoPiloto">
+          <End Type="VuelosModel.tbl_TipoPiloto" Role="tbl_TipoPiloto" Multiplicity="1" />
+          <End Type="VuelosModel.tbl_CiudadOrigenDestino" Role="tbl_CiudadOrigenDestino" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_TipoPiloto">
+              <PropertyRef Name="id_TipoPiloto" />
+            </Principal>
+            <Dependent Role="tbl_CiudadOrigenDestino">
+              <PropertyRef Name="id_TipoPiloto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_Piloto_tbl_TipoPiloto">
+          <End Type="VuelosModel.tbl_TipoPiloto" Role="tbl_TipoPiloto" Multiplicity="1" />
+          <End Type="VuelosModel.tbl_Piloto" Role="tbl_Piloto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_TipoPiloto">
+              <PropertyRef Name="id_TipoPiloto" />
+            </Principal>
+            <Dependent Role="tbl_Piloto">
+              <PropertyRef Name="id_TipoPiloto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="VuelosModelStoreContainer" CdmEntityContainer="VuelosEntitiesConnection">
+          <FunctionImportMapping FunctionImportName="sp_Ciudad_Destino_Retorna" FunctionName="VuelosModel.Store.sp_Ciudad_Destino_Retorna">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VuelosModel.sp_Ciudad_Destino_Retorna_Result">
+                <ScalarProperty Name="id_Ciudad" ColumnName="id_Ciudad" />
+                <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+                <ScalarProperty Name="id_TipoPiloto" ColumnName="id_TipoPiloto" />
+                <ScalarProperty Name="cantidadHoras" ColumnName="cantidadHoras" />
+                <ScalarProperty Name="id_CiudadOrigen" ColumnName="id_CiudadOrigen" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_Ciudad_Origen_Retorna" FunctionName="VuelosModel.Store.sp_Ciudad_Origen_Retorna">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VuelosModel.sp_Ciudad_Origen_Retorna_Result">
+                <ScalarProperty Name="id_Ciudad" ColumnName="id_Ciudad" />
+                <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+                <ScalarProperty Name="id_TipoPiloto" ColumnName="id_TipoPiloto" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_Origen_Destino_Duracion_Retorna" FunctionName="VuelosModel.Store.sp_Origen_Destino_Duracion_Retorna">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VuelosModel.sp_Origen_Destino_Duracion_Retorna_Result">
+                <ScalarProperty Name="id_CiudadOrigenDestino" ColumnName="id_CiudadOrigenDestino" />
+                <ScalarProperty Name="id_CiudadOrigen" ColumnName="id_CiudadOrigen" />
+                <ScalarProperty Name="id_CiudadDestino" ColumnName="id_CiudadDestino" />
+                <ScalarProperty Name="id_TipoPiloto" ColumnName="id_TipoPiloto" />
+                <ScalarProperty Name="cantidadHoras" ColumnName="cantidadHoras" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_Piloto_Origen_Destino_Retorna" FunctionName="VuelosModel.Store.sp_Piloto_Origen_Destino_Retorna">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VuelosModel.sp_Piloto_Origen_Destino_Retorna_Result">
+                <ScalarProperty Name="id_CiudadOrigenDestino" ColumnName="id_CiudadOrigenDestino" />
+                <ScalarProperty Name="id_CiudadOrigen" ColumnName="id_CiudadOrigen" />
+                <ScalarProperty Name="id_CiudadDestino" ColumnName="id_CiudadDestino" />
+                <ScalarProperty Name="id_TipoPiloto" ColumnName="id_TipoPiloto" />
+                <ScalarProperty Name="tipoPiloto" ColumnName="tipoPiloto" />
+                <ScalarProperty Name="salarioHora" ColumnName="salarioHora" />
+                <ScalarProperty Name="id_Piloto" ColumnName="id_Piloto" />
+                <ScalarProperty Name="nombreCompleto" ColumnName="nombreCompleto" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+                <ScalarProperty Name="cantidadHoras" ColumnName="cantidadHoras" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_Piloto_Retorna_ID" FunctionName="VuelosModel.Store.sp_Piloto_Retorna_ID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VuelosModel.sp_Piloto_Retorna_ID_Result">
+                <ScalarProperty Name="id_Piloto" ColumnName="id_Piloto" />
+                <ScalarProperty Name="nombreCompleto" ColumnName="nombreCompleto" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+                <ScalarProperty Name="id_TipoPiloto" ColumnName="id_TipoPiloto" />
+                <ScalarProperty Name="tipoPiloto" ColumnName="tipoPiloto" />
+                <ScalarProperty Name="salarioHora" ColumnName="salarioHora" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_Piloto_Retorna_PorTipoPiloto" FunctionName="VuelosModel.Store.sp_Piloto_Retorna_PorTipoPiloto">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VuelosModel.sp_Piloto_Retorna_PorTipoPiloto_Result">
+                <ScalarProperty Name="id_Piloto" ColumnName="id_Piloto" />
+                <ScalarProperty Name="nombreCompleto" ColumnName="nombreCompleto" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+                <ScalarProperty Name="id_TipoPiloto" ColumnName="id_TipoPiloto" />
+                <ScalarProperty Name="tipoPiloto" ColumnName="tipoPiloto" />
+                <ScalarProperty Name="salarioHora" ColumnName="salarioHora" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_Tipo_Piloto_Retorna" FunctionName="VuelosModel.Store.sp_Tipo_Piloto_Retorna">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VuelosModel.sp_Tipo_Piloto_Retorna_Result">
+                <ScalarProperty Name="id_TipoPiloto" ColumnName="id_TipoPiloto" />
+                <ScalarProperty Name="tipoPiloto" ColumnName="tipoPiloto" />
+                <ScalarProperty Name="salarioHora" ColumnName="salarioHora" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_Vuelo_Inserta" FunctionName="VuelosModel.Store.sp_Vuelo_Inserta" />
+          <FunctionImportMapping FunctionImportName="sp_Vuelo_Retorna" FunctionName="VuelosModel.Store.sp_Vuelo_Retorna">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VuelosModel.sp_Vuelo_Retorna_Result">
+                <ScalarProperty Name="id_Vuelo" ColumnName="id_Vuelo" />
+                <ScalarProperty Name="id_CiudadOrigen" ColumnName="id_CiudadOrigen" />
+                <ScalarProperty Name="id_Piloto" ColumnName="id_Piloto" />
+                <ScalarProperty Name="montoSalarioPiloto" ColumnName="montoSalarioPiloto" />
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="nombreCompleto" ColumnName="nombreCompleto" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+                <ScalarProperty Name="cantidadHoras" ColumnName="cantidadHoras" />
+                <ScalarProperty Name="CiudadOrigen" ColumnName="CiudadOrigen" />
+                <ScalarProperty Name="id_CiudadDestino" ColumnName="id_CiudadDestino" />
+                <ScalarProperty Name="CiudadDestino" ColumnName="CiudadDestino" />
+                <ScalarProperty Name="id_TipoPiloto" ColumnName="id_TipoPiloto" />
+                <ScalarProperty Name="tipoPiloto" ColumnName="tipoPiloto" />
+                <ScalarProperty Name="salarioHora" ColumnName="salarioHora" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="tbl_Ciudad">
+            <EntityTypeMapping TypeName="VuelosModel.tbl_Ciudad">
+              <MappingFragment StoreEntitySet="tbl_Ciudad">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+                <ScalarProperty Name="id_Ciudad" ColumnName="id_Ciudad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_CiudadOrigenDestino">
+            <EntityTypeMapping TypeName="VuelosModel.tbl_CiudadOrigenDestino">
+              <MappingFragment StoreEntitySet="tbl_CiudadOrigenDestino">
+                <ScalarProperty Name="cantidadHoras" ColumnName="cantidadHoras" />
+                <ScalarProperty Name="id_TipoPiloto" ColumnName="id_TipoPiloto" />
+                <ScalarProperty Name="id_CiudadDestino" ColumnName="id_CiudadDestino" />
+                <ScalarProperty Name="id_CiudadOrigen" ColumnName="id_CiudadOrigen" />
+                <ScalarProperty Name="id_CiudadOrigenDestino" ColumnName="id_CiudadOrigenDestino" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_Piloto">
+            <EntityTypeMapping TypeName="VuelosModel.tbl_Piloto">
+              <MappingFragment StoreEntitySet="tbl_Piloto">
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+                <ScalarProperty Name="nombreCompleto" ColumnName="nombreCompleto" />
+                <ScalarProperty Name="id_TipoPiloto" ColumnName="id_TipoPiloto" />
+                <ScalarProperty Name="id_Piloto" ColumnName="id_Piloto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_TipoPiloto">
+            <EntityTypeMapping TypeName="VuelosModel.tbl_TipoPiloto">
+              <MappingFragment StoreEntitySet="tbl_TipoPiloto">
+                <ScalarProperty Name="salarioHora" ColumnName="salarioHora" />
+                <ScalarProperty Name="tipoPiloto" ColumnName="tipoPiloto" />
+                <ScalarProperty Name="id_TipoPiloto" ColumnName="id_TipoPiloto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_Vuelo">
+            <EntityTypeMapping TypeName="VuelosModel.tbl_Vuelo">
+              <MappingFragment StoreEntitySet="tbl_Vuelo">
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="montoSalarioPiloto" ColumnName="montoSalarioPiloto" />
+                <ScalarProperty Name="cantidadHoras" ColumnName="cantidadHoras" />
+                <ScalarProperty Name="id_Piloto" ColumnName="id_Piloto" />
+                <ScalarProperty Name="id_CiudadDestino" ColumnName="id_CiudadDestino" />
+                <ScalarProperty Name="id_CiudadOrigen" ColumnName="id_CiudadOrigen" />
+                <ScalarProperty Name="id_Vuelo" ColumnName="id_Vuelo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VW_CIUDAD_DESTINO">
+            <EntityTypeMapping TypeName="VuelosModel.VW_CIUDAD_DESTINO">
+              <MappingFragment StoreEntitySet="VW_CIUDAD_DESTINO">
+                <ScalarProperty Name="id_CiudadOrigen" ColumnName="id_CiudadOrigen" />
+                <ScalarProperty Name="cantidadHoras" ColumnName="cantidadHoras" />
+                <ScalarProperty Name="id_TipoPiloto" ColumnName="id_TipoPiloto" />
+                <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+                <ScalarProperty Name="id_Ciudad" ColumnName="id_Ciudad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VW_CIUDAD_ORIGEN">
+            <EntityTypeMapping TypeName="VuelosModel.VW_CIUDAD_ORIGEN">
+              <MappingFragment StoreEntitySet="VW_CIUDAD_ORIGEN">
+                <ScalarProperty Name="id_TipoPiloto" ColumnName="id_TipoPiloto" />
+                <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+                <ScalarProperty Name="id_Ciudad" ColumnName="id_Ciudad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VW_PILOTO">
+            <EntityTypeMapping TypeName="VuelosModel.VW_PILOTO">
+              <MappingFragment StoreEntitySet="VW_PILOTO">
+                <ScalarProperty Name="salarioHora" ColumnName="salarioHora" />
+                <ScalarProperty Name="tipoPiloto" ColumnName="tipoPiloto" />
+                <ScalarProperty Name="id_TipoPiloto" ColumnName="id_TipoPiloto" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+                <ScalarProperty Name="nombreCompleto" ColumnName="nombreCompleto" />
+                <ScalarProperty Name="id_Piloto" ColumnName="id_Piloto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VW_PILOTO_ORIGEN_DESTINO">
+            <EntityTypeMapping TypeName="VuelosModel.VW_PILOTO_ORIGEN_DESTINO">
+              <MappingFragment StoreEntitySet="VW_PILOTO_ORIGEN_DESTINO">
+                <ScalarProperty Name="cantidadHoras" ColumnName="cantidadHoras" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+                <ScalarProperty Name="nombreCompleto" ColumnName="nombreCompleto" />
+                <ScalarProperty Name="id_Piloto" ColumnName="id_Piloto" />
+                <ScalarProperty Name="salarioHora" ColumnName="salarioHora" />
+                <ScalarProperty Name="tipoPiloto" ColumnName="tipoPiloto" />
+                <ScalarProperty Name="id_TipoPiloto" ColumnName="id_TipoPiloto" />
+                <ScalarProperty Name="id_CiudadDestino" ColumnName="id_CiudadDestino" />
+                <ScalarProperty Name="id_CiudadOrigen" ColumnName="id_CiudadOrigen" />
+                <ScalarProperty Name="id_CiudadOrigenDestino" ColumnName="id_CiudadOrigenDestino" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VW_VUELO">
+            <EntityTypeMapping TypeName="VuelosModel.VW_VUELO">
+              <MappingFragment StoreEntitySet="VW_VUELO">
+                <ScalarProperty Name="salarioHora" ColumnName="salarioHora" />
+                <ScalarProperty Name="tipoPiloto" ColumnName="tipoPiloto" />
+                <ScalarProperty Name="id_TipoPiloto" ColumnName="id_TipoPiloto" />
+                <ScalarProperty Name="CiudadDestino" ColumnName="CiudadDestino" />
+                <ScalarProperty Name="id_CiudadDestino" ColumnName="id_CiudadDestino" />
+                <ScalarProperty Name="CiudadOrigen" ColumnName="CiudadOrigen" />
+                <ScalarProperty Name="cantidadHoras" ColumnName="cantidadHoras" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+                <ScalarProperty Name="nombreCompleto" ColumnName="nombreCompleto" />
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="montoSalarioPiloto" ColumnName="montoSalarioPiloto" />
+                <ScalarProperty Name="id_Piloto" ColumnName="id_Piloto" />
+                <ScalarProperty Name="id_CiudadOrigen" ColumnName="id_CiudadOrigen" />
+                <ScalarProperty Name="id_Vuelo" ColumnName="id_Vuelo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
