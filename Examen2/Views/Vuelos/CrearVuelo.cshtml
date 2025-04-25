@@ -186,7 +186,8 @@
                         success: function (result) {
                             if (result.msgError) {
                                 $("#mensaje-error").show()
-                                $('#mensaje-error').text('Error al insertar vuelo').css('color', 'red');
+                                $('#mensaje-error').text(`Error al insertar vuelo: ${result.msgError}`).css('color', 'red');
+                                $('#btnInsertar').attr('disabled', null)
                                 return;
                             }
                             $("#mensaje-success").show()
